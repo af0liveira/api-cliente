@@ -2,9 +2,12 @@
 
 import re
 
+from validate_docbr import CPF
+
 def cpf_is_valid(cpf_number):
-    """Check if CPF has the correct number of digits."""
-    return len(cpf_number) == 11
+    """Validate CPF number."""
+    cpf = CPF()
+    return cpf.validate(cpf_number)
 
 def nome_is_valid(nome):
     """Check whether `nome` points to a valid name."""

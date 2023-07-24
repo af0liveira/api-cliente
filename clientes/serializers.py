@@ -15,7 +15,7 @@ class ClienteSerializer(serializers.ModelSerializer):
         errors = {}
 
         if not cpf_is_valid(data['cpf']):
-            errors['cpf'] = "Este campo deve conter 11 dígitos."
+            errors['cpf'] = "O número informado não é um CPF válido."
 
         if not nome_is_valid(data['nome']):
             errors['nome'] = "Este campo só pode conter letras, espaços e hífens."
