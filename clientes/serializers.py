@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from clientes.models import Cliente
+from clientes.validators import *
 
 class ClienteSerializer(serializers.ModelSerializer):
 
@@ -7,24 +9,24 @@ class ClienteSerializer(serializers.ModelSerializer):
         model = Cliente
         fields = '__all__'
     
-    def validate_cpf(self, cpf):
-        if len(cpf) != 11:
-            raise serializers.ValidationError("Este campo deve ter 11 dígitos.")
-        return cpf
-    
-    def validate_nome(self, nome):
-        if not nome.replace(' ', '').isalpha():
-            raise serializers.ValidationError(
-                    "Certifique-se de que este campo não contenha números.")
-        return nome
-    
-    def validate_rg(self, rg):
-        if len(rg) != 9:
-            raise serializers.ValidationError("Este campo deve ter 9 dígitos.")
-        return rg
-    
-    def validate_celular(self, celular):
-        if len(celular) < 11:
-            raise serializers.ValidationError(
-                    "Este campo deve ter 11 ou mais dígitos.")
-        return celular
+    def validate(self, data):
+        """Validate Cliente data."""
+
+        errors = {}
+
+        if not cpf_is_valid(data['cpf']):
+            errors['cpf'] = "Este campo deve conter 11 dígitos."
+
+        if not nome_is_valid(data['nome']):
+            errors['nome'] = "Este campo só pode conter letras, espaços e hífens."
+
+        if not rg_is_valid(data['rg']):
+            errors['rg'] = "Este campo deve ter 9 dígitos."
+
+        if not celular_is_valid(data['celular']):
+            errors['celular'] = "Este campo deve ter no mínimo 11 dígitos."
+
+        if errors:
+             raise serializers.ValidationError(errors)
+
+        return data
