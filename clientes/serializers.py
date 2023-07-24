@@ -24,7 +24,7 @@ class ClienteSerializer(serializers.ModelSerializer):
             errors['rg'] = "Este campo deve ter 9 dígitos."
 
         if not celular_is_valid(data['celular']):
-            errors['celular'] = "Este campo deve ter no mínimo 11 dígitos."
+            errors['celular'] = "Deve obedecer o padrão '(xx)9yyyy-zzzz'."
 
         if errors:
              raise serializers.ValidationError(errors)
